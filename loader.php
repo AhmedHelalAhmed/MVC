@@ -36,3 +36,16 @@ spl_autoload_register
 );
 
 
+function route($request)
+{
+  $controller=$request->uri(0);
+  $action=$request->uri(1);
+  
+  if(!class_exists($controller)||iscallable($controller,$action))
+  {
+  $controller='BadRequest';
+  $action='not_found';  
+  }
+  $ctrl=new $controller($request);
+  call_user_func_array([$ctrl,$action],[]);
+}
